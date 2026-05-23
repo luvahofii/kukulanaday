@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a0a0f" />
+  <meta name="description" content="Kukulana Day - Mpango wetu wa karibu" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kukulana Day" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Kukulana Day 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0508;
+      --surface: #1a0a10;
+      --surface2: #261219;
+      --rose: #c8546a;
+      --rose-light: #e8768a;
+      --rose-pale: #f0a3b2;
+      --gold: #c9955a;
+      --gold-light: #e8b878;
+      --cream: #f5e6d8;
+      --text: #f0ddd4;
+      --text-dim: #9a7870;
+      --border: rgba(200, 84, 106, 0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(200,84,106,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(201,149,90,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(200,84,106,0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 0 80px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 40px 24px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-hearts {
+      font-size: 22px;
+      letter-spacing: 8px;
+      margin-bottom: 12px;
+      animation: pulse-hearts 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-hearts {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--rose-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .header .subtitle {
+      font-style: italic;
+      font-size: 16px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    /* Notification banner */
+    .notif-banner {
+      margin: 16px 20px 0;
+      padding: 14px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .notif-banner:hover { border-color: var(--rose); }
+
+    .notif-icon { font-size: 22px; }
+
+    .notif-text { flex: 1; }
+    .notif-text strong { display: block; font-size: 14px; color: var(--rose-pale); font-family: 'Cinzel', serif; }
+    .notif-text span { font-size: 13px; color: var(--text-dim); font-style: italic; }
+
+    .notif-btn {
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: 'Cinzel', serif;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .notif-btn:hover { opacity: 0.85; }
+
+    /* Calendar */
+    .calendar-section {
+      padding: 24px 20px 16px;
+    }
+
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .cal-nav-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--rose-light);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .cal-nav-btn:hover { background: var(--rose); border-color: var(--rose); color: white; }
+
+    .cal-month-title {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      color: var(--cream);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-day-header {
+      text-align: center;
+      font-size: 11px;
+      font-family: 'Cinzel', serif;
+      color: var(--text-dim);
+      padding: 6px 0;
+      letter-spacing: 1px;
+    }
+
+    .cal-cell {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      border: 1px solid transparent;
+      font-weight: 300;
+    }
+
+    .cal-cell:hover:not(.empty) { border-color: var(--rose); background: var(--surface2); }
+
+    .cal-cell.empty { cursor: default; }
+
+    .cal-cell.today {
+      border-color: var(--gold);
+      background: rgba(201,149,90,0.1);
+      color: var(--gold-light);
+      font-weight: 400;
+    }
+
+    .cal-cell.intimate {
+      background: linear-gradient(135deg, rgba(200,84,106,0.25), rgba(201,149,90,0.15));
+      border-color: rgba(200,84,106,0.5);
+      color: var(--rose-pale);
+      font-weight: 400;
+    }
+
+    .cal-cell.intimate::after {
+      content: '♥';
+      position: absolute;
+      bottom: 3px;
+      right: 4px;
+      font-size: 8px;
+      color: var(--rose);
+      opacity: 0.8;
+    }
+
+    .cal-cell.intimate.today {
+      background: linear-gradient(135deg, rgba(200,84,106,0.45), rgba(201,149,90,0.25));
+      border-color: var(--rose);
+      box-shadow: 0 0 16px rgba(200,84,106,0.3);
+    }
+
+    .cal-cell.selected {
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 16px rgba(200,84,106,0.4);
+    }
+
+    .cal-cell.selected::after { color: white; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 16px;
+      padding: 12px 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.intimate { background: var(--rose); }
+    .legend-dot.today { background: var(--gold); }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 24px;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Tip card */
+    .tip-section {
+      padding: 0 20px 16px;
+    }
+
+    .tip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .tip-card-header {
+      background: linear-gradient(135deg, rgba(200,84,106,0.2), rgba(201,149,90,0.15));
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tip-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: var(--rose-pale);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .tip-date-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .tip-body {
+      padding: 20px;
+    }
+
+    .tip-name {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+
+    .tip-description {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      font-weight: 300;
+      margin-bottom: 14px;
+    }
+
+    .tip-advice {
+      background: rgba(200,84,106,0.08);
+      border-left: 3px solid var(--rose);
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--rose-pale);
+      line-height: 1.6;
+    }
+
+    .tip-advice::before { content: '✦ '; font-style: normal; }
+
+    .tip-refresh {
+      display: flex;
+      justify-content: flex-end;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .refresh-btn:hover { border-color: var(--rose); color: var(--rose-light); }
+
+    /* No intimate day card */
+    .no-intimate-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .no-intimate-card .emoji { font-size: 32px; margin-bottom: 10px; }
+    .no-intimate-card h3 { font-family: 'Cinzel', serif; font-size: 16px; color: var(--text-dim); margin-bottom: 8px; }
+    .no-intimate-card p { font-size: 14px; font-style: italic; color: var(--text-dim); line-height: 1.6; }
+
+    /* Next date banner */
+    .next-date-banner {
+      margin: 0 20px 16px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, rgba(200,84,106,0.12), rgba(201,149,90,0.08));
+      border: 1px solid rgba(200,84,106,0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .next-date-icon { font-size: 24px; }
+    .next-date-text strong { display: block; font-family: 'Cinzel', serif; font-size: 13px; color: var(--rose-pale); margin-bottom: 2px; }
+    .next-date-text span { font-size: 14px; color: var(--gold-light); font-style: italic; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: rgba(13,5,8,0.95);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 16px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 6px 16px;
+      border-radius: 10px;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      color: var(--text-dim);
+    }
+
+    .nav-item.active { color: var(--rose-light); }
+    .nav-item:hover { color: var(--rose-light); }
+
+    .nav-icon { font-size: 20px; }
+    .nav-label { font-size: 10px; font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
+
+    /* Stats section */
+    .stats-section {
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 28px;
+      color: var(--rose-light);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,5,8,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 28px 24px 40px;
+      width: 100%;
+      max-width: 480px;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal-date {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .modal-intimate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(200,84,106,0.25), rgba(201,149,90,0.15));
+      border: 1px solid rgba(200,84,106,0.4);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--rose-pale);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .modal h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+
+    .modal p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+
+    .modal .advice-box {
+      background: rgba(200,84,106,0.08);
+      border-left: 3px solid var(--rose);
+      padding: 14px 16px;
+      border-radius: 0 10px 10px 0;
+      font-style: italic;
+      color: var(--rose-pale);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .modal .advice-box::before { content: '✦ '; font-style: normal; }
+
+    .modal-close {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+      border: none;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .modal-close:hover { opacity: 0.85; }
+
+    /* Animate in */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      animation: fade-up 0.5s ease forwards;
+    }
+
+    .install-banner {
+      margin: 0 20px 16px;
+      padding: 14px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .install-banner span { flex: 1; font-size: 13px; color: var(--text-dim); font-style: italic; }
+
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface2);
+      border: 1px solid var(--rose);
+      color: var(--rose-pale);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-style: italic;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 300;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Header -->
+  <div class="header fade-up">
+    <div class="header-hearts">♥ ♥ ♥</div>
+    <h1>Kukulana Day</h1>
+    <p class="subtitle">Kalenda ya Intimacy — Safari yetu ya pamoja</p>
+  </div>
+
+  <!-- Notification Banner -->
+  <div class="notif-banner fade-up" id="notifBanner">
+    <span class="notif-icon">🔔</span>
+    <div class="notif-text">
+      <strong>Arifa za Asubuhi</strong>
+      <span>Pokea ukumbusho kila siku ya karibu</span>
+    </div>
+    <button class="notif-btn" id="notifBtn" onclick="requestNotifications()">Washa</button>
+  </div>
+
+  <!-- Install banner (shown when installable) -->
+  <div class="install-banner fade-up" id="installBanner" style="display:none;" onclick="installApp()">
+    <span class="notif-icon">📱</span>
+    <span>Sakinisha programu hii kwenye simu yako</span>
+    <button class="notif-btn">Sakinisha</button>
+  </div>
+
+  <!-- Next intimate date -->
+  <div class="next-date-banner fade-up" id="nextDateBanner">
+    <span class="next-date-icon">💕</span>
+    <div class="next-date-text">
+      <strong>Tarehe Inayofuata</strong>
+      <span id="nextDateText">Inasubiri...</span>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="calendar-section fade-up">
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="prevMonth()">‹</button>
+      <div class="cal-month-title" id="monthTitle"></div>
+      <button class="cal-nav-btn" onclick="nextMonth()">›</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend fade-up">
+    <div class="legend-item"><div class="legend-dot intimate"></div>Siku ya Upendo</div>
+    <div class="legend-item"><div class="legend-dot today"></div>Leo</div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider fade-up">✦ Ushauri wa Leo ✦</div>
+
+  <!-- Stats -->
+  <div class="stats-section fade-up">
+    <div class="stat-card">
+      <span class="stat-value" id="statMonthly">0</span>
+      <div class="stat-label">Siku za karibu mwezi huu</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="statYearly">0</span>
+      <div class="stat-label">Jumla mwaka huu</div>
+    </div>
+  </div>
+
+  <!-- Tip Card -->
+  <div class="tip-section fade-up">
+    <div class="tip-card" id="tipCard">
+      <div class="tip-card-header">
+        <span class="tip-card-title">✦ Kamasutra & Ushauri</span>
+        <span class="tip-date-label" id="tipDateLabel"></span>
+      </div>
+      <div class="tip-body">
+        <div class="tip-name" id="tipName"></div>
+        <div class="tip-description" id="tipDesc"></div>
+        <div class="tip-advice" id="tipAdvice"></div>
+      </div>
+      <div class="tip-refresh">
+        <button class="refresh-btn" onclick="shuffleTip()">✦ Badilisha ushauri</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Day Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-intimate-badge" id="modalBadge"></div>
+    <h2 id="modalTipName"></h2>
+    <p id="modalTipDesc"></p>
+    <div class="advice-box" id="modalAdvice"></div>
+    <button class="modal-close" onclick="closeModalDirect()">Funga ✦</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="nav-item active">
+    <span class="nav-icon">📅</span>
+    <span class="nav-label">Kalenda</span>
+  </button>
+  <button class="nav-item" onclick="showToast('Kipengele hiki kinakuja hivi karibuni 💕')">
+    <span class="nav-icon">💌</span>
+    <span class="nav-label">Ujumbe</span>
+  </button>
+  <button class="nav-item" onclick="showToast('Mipangilio itakuja hivi karibuni ✦')">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">Mipangilio</span>
+  </button>
+</div>
+
+<script>
+// ─── Data ─────────────────────────────────────────────────────────────────
+const MONTHS_SW = [
+  'Januari','Februari','Machi','Aprili','Mei','Juni',
+  'Julai','Agosti','Septemba','Oktoba','Novemba','Desemba'
+];
+const DAYS_SW = ['Ji','Jt','Jp','Jn','Al','Ij','Mo'];
+const DAYS_FULL_SW = ['Jumapili','Jumatatu','Jumanne','Jumatano','Alhamisi','Ijumaa','Jumamosi'];
+
+const TIPS = [
+  {
+    name: "Lotus — Farasi wa Maua",
+    desc: "Mkao huu wa upendo ni mzuri sana kwa uhusiano wa kina. Mpenzi wako akikaa juu yako uso kwa uso, nyinyi wote mnakuwa karibu sana kwa kupumzika pamoja na kuoanisha pumzi.",
+    advice: "Pumzikeni taratibu, angaliani macho ya mtu mwingine. Hii ni nafasi nzuri ya kusema maneno matamu ya upendo na kushikana mikono."
+  },
+  {
+    name: "Tasa ya Mto — Mwelekeo wa Utulivu",
+    desc: "Mkao wa upole ambao unafaa kwa usiku wa kwanza au wakati mnataka karibu zaidi bila msisimko. Mnalala upande mmoja, nyuma kwa tumbo.",
+    advice: "Mazungumzo mazuri yanaweza kuanza kutoka hapa. Mwambie mpenzi wako kitu kimoja unachompenda kuhusu yeye usiku huu."
+  },
+  {
+    name: "Mlima Mzuri — Nguvu za Pamoja",
+    desc: "Mkao huu unaonekana vigumu lakini unaweza kujaribu polepole. Mpenzi mmoja anakuwa juu akiungwa mkono kwa nguvu, hii inazidisha hisia za pamoja.",
+    advice: "Kabla ya kuanza, bombenani, piga masage mabegani na shingoni. Mwili uliostarehevu unafurahia zaidi."
+  },
+  {
+    name: "Ndege wa Pepo — Ubunifu wa Upendo",
+    desc: "Mkao huu unahitaji ubunifu kidogo. Mmoja wenu anaenea, mwingine anakaa kwa pembe fulani. Inazidisha anuwai ya hisia na kufurahisha.",
+    advice: "Jaribuni mwanga laini — mishumaa au taa ndogo. Mazingira mazuri yanafanya furaha ya pamoja kuwa bora zaidi."
+  },
+  {
+    name: "Mti wa Amani — Kina cha Moyo",
+    desc: "Mkao wa karibu sana ambapo mpenzi wako anakaa mikononi mwako. Inafaa kwa usiku wa hisia na upendo wa dhati. Moyo kwa moyo, pumzi kwa pumzi.",
+    advice: "Sikilizaneni vizuri. Uliza mpenzi wako anapenda nini zaidi kuhusu wewe, na mwambie ukweli wa moyo wako."
+  },
+  {
+    name: "Jua la Asubuhi — Nguvu na Upole",
+    desc: "Mkao rahisi lakini wenye nguvu. Mmoja amelala, mwingine juu. Unaoruhusu msisimko wa haraka na mshikamano wa kina wakati mmoja.",
+    advice: "Anza na masage ya vidole — miguu, mabega, nyuma. Hizi dakika 5 za awali zinafanya tofauti kubwa ya furaha."
+  },
+  {
+    name: "Pembe ya Nyota — Usawa wa Furaha",
+    desc: "Mkao huu unaruhusu wote wawili kupumzika wakati furaha inaendelea. Ninyi wote mnakuwa na nguvu sawa na hisia za usawa.",
+    advice: "Jaribuni muziki wa polepole unaofaa — sauti nzuri inaweza kubadilisha hali nzima ya usiku."
+  },
+  {
+    name: "Kivuli cha Mwezi — Upole wa Usiku",
+    desc: "Mkao wa usiku wa mapenzi wa kweli. Upole na mzuri, unaruhusu mazungumzo ya moyo bila msisimko wa haraka. Muda wako wa pamoja unakuwa wa kumbukumbu.",
+    advice: "Baada ya wakati wenu wa pamoja, kaa pamoja dakika 15 bila simu. Sema maneno matatu ya shukrani kila mmoja."
+  },
+  {
+    name: "Chanzo cha Mto — Ubunifu wa Mwili",
+    desc: "Mkao huu unakusudia kufurahisha mwili wote. Mpenzi wako amelala juu, wewe uko chini — inabadilisha nguvu na inaweka furaha mpya.",
+    advice: "Fanyeni badiliko la mazingira — chumba kipya, wakati tofauti. Mabadiliko madogo yanafanya tofauti kubwa."
+  },
+  {
+    name: "Wimbo wa Angani — Kina cha Furaha",
+    desc: "Mkao huu unatoka moja kwa moja kwenye mafunzo ya kale ya Kamasutra. Unazidisha hisia za kina na kuwezesha mshikamano wa roho na mwili.",
+    advice: "Kabla ya kulala, andikeni pamoja vitu vitatu mlivyofurahia kuhusu usiku wenu. Hii inaimarisha uhusiano wenu."
+  }
+];
+
+// ─── State ─────────────────────────────────────────────────────────────────
+let currentYear, currentMonth, today, deferredPrompt, tipIndex = 0;
+
+function init() {
+  today = new Date();
+  currentYear = today.getFullYear();
+  currentMonth = today.getMonth();
+  tipIndex = Math.floor(Math.random() * TIPS.length);
+  renderCalendar();
+  renderTip();
+  updateNextDate();
+  updateStats();
+  setupSW();
+  checkNotificationStatus();
+}
+
+// ─── Intimate day logic ─────────────────────────────────────────────────────
+function isIntimateDay(year, month, day) {
+  const date = new Date(year, month, day);
+  const dow = date.getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
+  // Mon=1, Wed=3, Sat=6
+  if (dow === 1 || dow === 3 || dow === 6) return true;
+  // Last day of month
+  const lastDay = new Date(year, month + 1, 0).getDate();
+  if (day === lastDay) return true;
+  return false;
+}
+
+function getIntimateCountInMonth(year, month) {
+  const lastDay = new Date(year, month + 1, 0).getDate();
+  let count = 0;
+  const seen = new Set();
+  for (let d = 1; d <= lastDay; d++) {
+    if (isIntimateDay(year, month, d)) { count++; seen.add(d); }
+  }
+  return count;
+}
+
+function getIntimateCountInYear(year) {
+  let count = 0;
+  for (let m = 0; m < 12; m++) count += getIntimateCountInMonth(year, m);
+  return count;
+}
+
+function getNextIntimateDate() {
+  const start = new Date(today);
+  start.setHours(0,0,0,0);
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    if (isIntimateDay(d.getFullYear(), d.getMonth(), d.getDate())) return d;
+  }
+  return null;
+}
+
+// ─── Render Calendar ────────────────────────────────────────────────────────
+function renderCalendar() {
+  const title = document.getElementById('monthTitle');
+  title.textContent = `${MONTHS_SW[currentMonth]} ${currentYear}`;
+
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+
+  // Day headers
+  DAYS_SW.forEach(d => {
+    const h = document.createElement('div');
+    h.className = 'cal-day-header';
+    h.textContent = d;
+    grid.appendChild(h);
+  });
+
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const lastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  // Empty cells
+  for (let i = 0; i < firstDay; i++) {
+    const e = document.createElement('div');
+    e.className = 'cal-cell empty';
+    grid.appendChild(e);
+  }
+
+  // Day cells
+  for (let d = 1; d <= lastDay; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+    cell.textContent = d;
+
+    const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+    const intimate = isIntimateDay(currentYear, currentMonth, d);
+
+    if (intimate) cell.classList.add('intimate');
+    if (isToday) cell.classList.add('today');
+
+    cell.addEventListener('click', () => openDayModal(d, intimate));
+    grid.appendChild(cell);
+  }
+}
+
+// ─── Tip rendering ──────────────────────────────────────────────────────────
+function renderTip() {
+  const tip = TIPS[tipIndex % TIPS.length];
+  document.getElementById('tipName').textContent = tip.name;
+  document.getElementById('tipDesc').textContent = tip.desc;
+  document.getElementById('tipAdvice').textContent = tip.advice;
+  const now = new Date();
+  document.getElementById('tipDateLabel').textContent = `${now.getDate()} ${MONTHS_SW[now.getMonth()]}`;
+}
+
+function shuffleTip() {
+  tipIndex = (tipIndex + 1) % TIPS.length;
+  renderTip();
+  showToast('Ushauri mpya umewekwa ✦');
+}
+
+// ─── Next date ──────────────────────────────────────────────────────────────
+function updateNextDate() {
+  const next = getNextIntimateDate();
+  if (!next) return;
+  const todayMid = new Date(today); todayMid.setHours(0,0,0,0);
+  const diff = Math.round((next - todayMid) / 86400000);
+  const dayName = DAYS_FULL_SW[next.getDay()];
+  const dateStr = `${dayName}, ${next.getDate()} ${MONTHS_SW[next.getMonth()]}`;
+  const el = document.getElementById('nextDateText');
+  if (diff === 0) el.textContent = `Leo — ${dateStr} 💕`;
+  else if (diff === 1) el.textContent = `Kesho — ${dateStr}`;
+  else el.textContent = `Baada ya siku ${diff} — ${dateStr}`;
+}
+
+// ─── Stats ──────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statMonthly').textContent = getIntimateCountInMonth(today.getFullYear(), today.getMonth());
+  document.getElementById('statYearly').textContent = getIntimateCountInYear(today.getFullYear());
+}
+
+// ─── Navigation ─────────────────────────────────────────────────────────────
+function prevMonth() {
+  currentMonth--;
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+function nextMonth() {
+  currentMonth++;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  renderCalendar();
+}
+
+// ─── Modal ──────────────────────────────────────────────────────────────────
+function openDayModal(day, intimate) {
+  const date = new Date(currentYear, currentMonth, day);
+  const dayName = DAYS_FULL_SW[date.getDay()];
+  document.getElementById('modalDate').textContent = `${dayName}, ${day} ${MONTHS_SW[currentMonth]} ${currentYear}`;
+
+  const badge = document.getElementById('modalBadge');
+  if (intimate) {
+    badge.textContent = '♥ Siku ya Upendo';
+    badge.style.display = 'inline-flex';
+    const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
+    document.getElementById('modalTipName').textContent = tip.name;
+    document.getElementById('modalTipDesc').textContent = tip.desc;
+    document.getElementById('modalAdvice').textContent = tip.advice;
+  } else {
+    badge.textContent = '— Siku ya Kawaida';
+    badge.style.borderColor = 'rgba(154,120,112,0.3)';
+    badge.style.background = 'rgba(154,120,112,0.08)';
+    badge.style.color = 'var(--text-dim)';
+    badge.style.display = 'inline-flex';
+    document.getElementById('modalTipName').textContent = 'Siku ya Kupumzika';
+    document.getElementById('modalTipDesc').textContent = 'Siku hii si siku ya karibu. Lakini unaweza kutumia muda huu kuandaa na kuandika maneno ya upendo kwa mpenzi wako, au kupanga jinsi ya kufanya siku inayofuata iwe maalum zaidi.';
+    document.getElementById('modalAdvice').textContent = 'Tuma ujumbe wa upendo leo — hata neno moja la shukrani linaweza kuleta furaha kubwa.';
+  }
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ─── Notifications ──────────────────────────────────────────────────────────
+function checkNotificationStatus() {
+  if (!('Notification' in window)) {
+    document.getElementById('notifBanner').style.display = 'none';
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    document.getElementById('notifBtn').textContent = 'Imewashwa ✓';
+    document.getElementById('notifBtn').style.background = 'rgba(201,149,90,0.3)';
+    document.getElementById('notifBtn').style.cursor = 'default';
+    scheduleNotifications();
+  }
+}
+
+async function requestNotifications() {
+  if (!('Notification' in window)) {
+    showToast('Kivinjari chako hakisaidii arifa');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    showToast('Arifa zimewashwa! ✦');
+    checkNotificationStatus();
+    // Show a test notification
+    setTimeout(() => {
+      showIntimacyNotification(isIntimateDay(today.getFullYear(), today.getMonth(), today.getDate()));
+    }, 1500);
+  } else {
+    showToast('Arifa hazikuruhusiwa');
+  }
+}
+
+function showIntimacyNotification(isToday) {
+  if (Notification.permission !== 'granted') return;
+  const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
+  if (isToday) {
+    new Notification('💕 Kukulana Day — Leo ni Siku Yenu!', {
+      body: `${tip.name}: ${tip.advice}`,
+      icon: 'icon-192.png',
+      badge: 'icon-192.png',
+      tag: 'intimacy-reminder'
+    });
+  } else {
+    const next = getNextIntimateDate();
+    const dayName = next ? DAYS_FULL_SW[next.getDay()] : '';
+    new Notification('💕 Kukulana Day — Ukumbusho', {
+      body: `Siku inayofuata ya upendo ni ${dayName}. Jiandae kwa furaha! ✦`,
+      icon: 'icon-192.png',
+      tag: 'intimacy-reminder'
+    });
+  }
+}
+
+function scheduleNotifications() {
+  // Register daily 7AM check via service worker message
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'SCHEDULE_NOTIFICATIONS' });
+  }
+}
+
+// ─── Service Worker ──────────────────────────────────────────────────────────
+function setupSW() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW registered');
+    }).catch(e => console.log('SW error', e));
+  }
+}
+
+// ─── PWA Install ─────────────────────────────────────────────────────────────
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r => {
+    if (r.outcome === 'accepted') showToast('Programu imesanikishwa! 💕');
+    deferredPrompt = null;
+    document.getElementById('installBanner').style.display = 'none';
+  });
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── Boot ────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
